@@ -205,7 +205,7 @@
   backdrop-filter: blur(12px);
 }
 
-.filters__row {
+.filters__main {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
@@ -215,6 +215,7 @@
 .search-box {
   position: relative;
   flex: 1 1 240px;
+  min-width: 0;
 }
 
 .search-box__icon {
@@ -244,7 +245,7 @@
   box-shadow: 0 0 0 3px var(--accent-glow);
 }
 
-.filters select {
+.filters__select {
   padding: 0.65rem 2rem 0.65rem 0.85rem;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
@@ -256,9 +257,10 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ca3b8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
+  min-width: 0;
 }
 
-.filters select:focus {
+.filters__select:focus {
   border-color: var(--accent);
 }
 
@@ -273,11 +275,13 @@
   color: var(--text-muted);
   cursor: pointer;
   transition: all 0.2s;
+  white-space: nowrap;
 }
 
 .chip-btn svg {
   width: 16px;
   height: 16px;
+  flex-shrink: 0;
 }
 
 .chip-btn:hover {
@@ -762,20 +766,77 @@
 }
 
 @media (max-width: 640px) {
+  .page {
+    padding: 1rem 0.85rem 2rem;
+  }
+
+  .header {
+    margin-bottom: 1.25rem;
+  }
+
   .header h1 {
     font-size: 1.35rem;
+  }
+
+  .main {
+    gap: 1rem;
   }
 
   .app-grid {
     grid-template-columns: 1fr;
   }
 
-  .filters__row {
-    flex-direction: column;
-    align-items: stretch;
+  .filters {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    padding: 0.75rem;
   }
 
-  .filters select {
+  .filters__main {
+    display: contents;
+  }
+
+  .search-box {
+    grid-column: 1 / -1;
+  }
+
+  .search-box input {
+    padding: 0.5rem 0.65rem 0.5rem 2.15rem;
+    font-size: 0.875rem;
+  }
+
+  .search-box__icon {
+    width: 16px;
+    height: 16px;
+    left: 0.65rem;
+  }
+
+  .filters__select {
     width: 100%;
+    padding: 0.5rem 1.65rem 0.5rem 0.6rem;
+    font-size: 0.8125rem;
+    background-position: right 0.55rem center;
+  }
+
+  .chip-btn {
+    justify-self: start;
+    align-self: center;
+    padding: 0.45rem 0.65rem;
+    font-size: 0.8125rem;
+    gap: 0.25rem;
+  }
+
+  .chip-btn__label {
+    display: none;
+  }
+
+  .filters__meta {
+    margin: 0;
+    align-self: center;
+    justify-self: end;
+    text-align: right;
+    font-size: 0.75rem;
+    line-height: 1.3;
   }
 }
