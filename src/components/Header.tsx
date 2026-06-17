@@ -1,4 +1,5 @@
 import { LanguageSwitcher } from './LanguageSwitcher'
+import { ThemeSwitcher } from './ThemeSwitcher'
 import { useI18n } from '../i18n'
 
 interface HeaderProps {
@@ -27,6 +28,7 @@ export function Header({ appCount, onRefresh, refreshing = false }: HeaderProps)
       </div>
 
       <div className="header__actions">
+        <ThemeSwitcher />
         <LanguageSwitcher />
         {onRefresh && (
           <button

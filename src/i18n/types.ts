@@ -44,6 +44,9 @@ export interface UiTranslations {
   previous: string
   next: string
   switchLanguage: string
+  switchTheme: string
+  darkMode: string
+  lightMode: string
   categoryFilter: string
   languageFilter: string
   searchLabel: string
