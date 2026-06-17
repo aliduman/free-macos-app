@@ -4,13 +4,18 @@ import type { SyncProgress } from '../services/appsDataService'
 interface SyncLoaderProps {
   progress: SyncProgress | null
   overlay?: boolean
+  compact?: boolean
 }
 
-export function SyncLoader({ progress, overlay = false }: SyncLoaderProps) {
+export function SyncLoader({
+  progress,
+  overlay = false,
+  compact = false,
+}: SyncLoaderProps) {
   const { t, format } = useI18n()
 
   const message = (() => {
-    if (!progress) return t.loading
+    if (!progress) return compact ? t.syncingInBackground : t.loading
 
     switch (progress.phase) {
       case 'cache':
@@ -50,12 +55,12 @@ export function SyncLoader({ progress, overlay = false }: SyncLoaderProps) {
       case 'save':
         return t.savingData
       default:
-        return t.loading
+        return compact ? t.syncingInBackground : t.loading
     }
   })()
 
   const percent = (() => {
-    if (!progress) return 5
+    if (!progress) return compact ? undefined : 5
     if (
       (progress.phase === 'translate' || progress.phase === 'validate') &&
       progress.total
@@ -65,15 +70,27 @@ export function SyncLoader({ progress, overlay = false }: SyncLoaderProps) {
     if (progress.phase === 'fetch') return 15
     if (progress.phase === 'save') return 95
     if (progress.phase === 'cache') return 100
-    return 5
+    return compact ? undefined : 5
   })()
+
+  if (compact) {
+    return (
+      <div className="sync-banner" role="status" aria-live="polite">
+        <div className="sync-banner__spinner" aria-hidden="true" />
+        <span className="sync-banner__text">{message}</span>
+        {percent !== undefined && (
+          <span className="sync-banner__percent">{percent}%</span>
+        )}
+      </div>
+    )
+  }
 
   return (
     <div className={`sync-loader ${overlay ? 'sync-loader--overlay' : ''}`}>
       <div className="loading">
         <div className="loading__spinner" />
         <p>{message}</p>
-        {progress && progress.phase !== 'cache' && (
+        {progress && progress.phase !== 'cache' && percent !== undefined && (
           <div className="loading__progress">
             <div className="loading__progress-bar" style={{ width: `${percent}%` }} />
           </div>

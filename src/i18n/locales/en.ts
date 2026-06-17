@@ -20,6 +20,7 @@ export const en: Translations = {
     savingData: 'Saving to local storage...',
     syncProgress: '{current} / {total} translated',
     syncProgressReused: '{current} / {total} translated ({skipped} reused)',
+    syncingInBackground: 'Updating translations in background...',
     cacheInfo: 'Data {age}',
     refreshData: 'Update data',
     refreshingData: 'Updating...',

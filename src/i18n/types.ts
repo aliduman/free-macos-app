@@ -24,6 +24,7 @@ export interface UiTranslations {
   savingData: string
   syncProgress: string
   syncProgressReused: string
+  syncingInBackground: string
   cacheInfo: string
   refreshData: string
   refreshingData: string

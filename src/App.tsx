@@ -13,6 +13,7 @@ function App() {
   const {
     apps,
     loading,
+    syncing,
     refreshing,
     error,
     progress,
@@ -46,8 +47,11 @@ function App() {
   return (
     <div className="page">
       {refreshing && <SyncLoader progress={progress} overlay />}
+      {syncing && !refreshing && (
+        <SyncLoader progress={progress} compact />
+      )}
 
-      <Header appCount={apps.length} onRefresh={reload} refreshing={refreshing} />
+      <Header appCount={apps.length} onRefresh={reload} refreshing={refreshing || syncing} />
 
       <main className="main">
         <Filters

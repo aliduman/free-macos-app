@@ -9,55 +9,48 @@ import {
   saveToStorage,
   type CachedAppsData,
 } from './dataCache'
+import { loadBundledApplications } from './bundledData'
 import { validateApplications } from './urlValidator'
 import { deduplicateApps } from '../utils/helpers'
 import type { MacApp } from '../types'
 
 export type { SyncProgress }
 
-export async function loadApplications(
-  onProgress?: (progress: SyncProgress) => void,
-): Promise<{ apps: MacApp[]; fromCache: boolean; fetchedAt: number }> {
-  const cached = loadFromStorage()
-
-  if (cached && isCacheFresh(cached.fetchedAt)) {
-    onProgress?.({ phase: 'cache' })
-    const apps = deduplicateApps(cached.applications)
-    if (apps.length !== cached.applications.length) {
-      saveToStorage({ fetchedAt: cached.fetchedAt, applications: apps })
-    }
-    return {
-      apps,
-      fromCache: true,
-      fetchedAt: cached.fetchedAt,
-    }
-  }
-
-  try {
-    return await refreshApplications(onProgress, cached?.applications)
-  } catch (err) {
-    if (cached) {
-      return {
-        apps: deduplicateApps(cached.applications),
-        fromCache: true,
-        fetchedAt: cached.fetchedAt,
-      }
-    }
-    throw err
-  }
+export interface LoadResult {
+  apps: MacApp[]
+  fromCache: boolean
+  fetchedAt: number
+  backgroundSync: boolean
 }
 
-export async function refreshApplications(
-  onProgress?: (progress: SyncProgress) => void,
-  previousApps?: MacApp[],
-): Promise<{ apps: MacApp[]; fromCache: boolean; fetchedAt: number }> {
-  const cached = loadFromStorage()
-  const baseline = previousApps ?? cached?.applications
+export interface SyncCallbacks {
+  onProgress?: (progress: SyncProgress) => void
+  onAppsUpdate?: (apps: MacApp[]) => void
+}
+
+async function resolveInitialApps(cached: CachedAppsData | null): Promise<MacApp[]> {
+  if (cached?.applications.length) {
+    return deduplicateApps(cached.applications)
+  }
+
+  return loadBundledApplications()
+}
+
+async function syncApplications(
+  previousApps: MacApp[],
+  callbacks?: SyncCallbacks,
+): Promise<{ apps: MacApp[]; fetchedAt: number }> {
+  const { onProgress, onAppsUpdate } = callbacks ?? {}
 
   onProgress?.({ phase: 'fetch' })
 
   const raw = await fetchRawApplications()
-  const localized = await buildLocalizedApplications(raw, baseline, onProgress)
+  const localized = await buildLocalizedApplications(
+    raw,
+    previousApps,
+    onProgress,
+    onAppsUpdate,
+  )
 
   const applications = deduplicateApps(
     await validateApplications(localized, (current, total) => {
@@ -73,10 +66,82 @@ export async function refreshApplications(
   }
 
   saveToStorage(payload)
+  onAppsUpdate?.(applications)
 
   return {
     apps: applications,
-    fromCache: false,
     fetchedAt: payload.fetchedAt,
+  }
+}
+
+export async function loadApplications(
+  callbacks?: SyncCallbacks,
+): Promise<LoadResult> {
+  const cached = loadFromStorage()
+
+  if (cached && isCacheFresh(cached.fetchedAt)) {
+    callbacks?.onProgress?.({ phase: 'cache' })
+    const apps = deduplicateApps(cached.applications)
+    if (apps.length !== cached.applications.length) {
+      saveToStorage({ fetchedAt: cached.fetchedAt, applications: apps })
+    }
+    return {
+      apps,
+      fromCache: true,
+      fetchedAt: cached.fetchedAt,
+      backgroundSync: false,
+    }
+  }
+
+  let initialApps: MacApp[]
+  try {
+    initialApps = await resolveInitialApps(cached)
+  } catch (err) {
+    if (cached) {
+      initialApps = deduplicateApps(cached.applications)
+    } else {
+      throw err
+    }
+  }
+
+  return {
+    apps: initialApps,
+    fromCache: Boolean(cached),
+    fetchedAt: cached?.fetchedAt ?? 0,
+    backgroundSync: true,
+  }
+}
+
+export async function runBackgroundSync(
+  previousApps: MacApp[],
+  callbacks?: SyncCallbacks,
+): Promise<{ apps: MacApp[]; fetchedAt: number }> {
+  try {
+    return await syncApplications(previousApps, callbacks)
+  } catch (err) {
+    const cached = loadFromStorage()
+    if (cached) {
+      return {
+        apps: deduplicateApps(cached.applications),
+        fetchedAt: cached.fetchedAt,
+      }
+    }
+    throw err
+  }
+}
+
+export async function refreshApplications(
+  callbacks?: SyncCallbacks,
+  previousApps?: MacApp[],
+): Promise<{ apps: MacApp[]; fromCache: boolean; fetchedAt: number }> {
+  const cached = loadFromStorage()
+  const baseline = previousApps ?? cached?.applications ?? []
+
+  const result = await syncApplications(baseline, callbacks)
+
+  return {
+    apps: result.apps,
+    fromCache: false,
+    fetchedAt: result.fetchedAt,
   }
 }

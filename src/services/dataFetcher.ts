@@ -71,32 +71,59 @@ function buildTranslationTasks(
   })
 }
 
+function mapRawToApps(
+  raw: RawApplicationsResponse,
+  tasks: TranslationTask[],
+  translated: string[],
+): MacApp[] {
+  return raw.applications.map((app, index) => ({
+    title: app.title,
+    categories: app.categories ?? [],
+    repo_url: app.repo_url,
+    icon_url: app.icon_url,
+    screenshots: app.screenshots ?? [],
+    official_site: app.official_site ?? '',
+    languages: app.languages ?? [],
+    short_description: {
+      en: tasks[index].en,
+      tr: translated[index],
+    },
+  }))
+}
+
 export async function buildLocalizedApplications(
   raw: RawApplicationsResponse,
   previousApps?: MacApp[],
   onProgress?: (progress: SyncProgress) => void,
+  onPartialApps?: (apps: MacApp[]) => void,
 ): Promise<MacApp[]> {
   const tasks = buildTranslationTasks(raw, previousApps)
+  const translated: string[] = new Array(tasks.length)
+
+  for (let i = 0; i < tasks.length; i++) {
+    translated[i] = tasks[i].reuseTr ?? tasks[i].en
+  }
 
   onProgress?.({ phase: 'translate', current: 0, total: tasks.length, skipped: 0 })
 
-  const translated = await translateWithReuse(tasks, (current, total, skipped) => {
-    onProgress?.({ phase: 'translate', current, total, skipped })
-  })
+  const pendingCount = tasks.filter((task) => task.reuseTr === undefined).length
+  const skipped = tasks.length - pendingCount
 
-  return deduplicateApps(
-    raw.applications.map((app, index) => ({
-      title: app.title,
-      categories: app.categories ?? [],
-      repo_url: app.repo_url,
-      icon_url: app.icon_url,
-      screenshots: app.screenshots ?? [],
-      official_site: app.official_site ?? '',
-      languages: app.languages ?? [],
-      short_description: {
-        en: tasks[index].en,
-        tr: translated[index],
-      },
-    })),
+  if (pendingCount === 0) {
+    onProgress?.({ phase: 'translate', current: 0, total: 0, skipped })
+    return deduplicateApps(mapRawToApps(raw, tasks, translated))
+  }
+
+  const results = await translateWithReuse(
+    tasks,
+    (current, total, skippedCount) => {
+      onProgress?.({ phase: 'translate', current, total, skipped: skippedCount })
+    },
+    (index, tr) => {
+      translated[index] = tr
+      onPartialApps?.(deduplicateApps(mapRawToApps(raw, tasks, translated)))
+    },
   )
+
+  return deduplicateApps(mapRawToApps(raw, tasks, results))
 }

@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type { MacApp } from '../types'
 import { appId, loadFavorites, saveFavorites } from '../utils/helpers'
 import {
   loadApplications,
   refreshApplications,
+  runBackgroundSync,
   type SyncProgress,
 } from '../services/appsDataService'
 
@@ -32,32 +33,65 @@ export function useFavorites() {
 export function useAppsData() {
   const [apps, setApps] = useState<MacApp[]>([])
   const [loading, setLoading] = useState(true)
+  const [syncing, setSyncing] = useState(false)
   const [refreshing, setRefreshing] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [progress, setProgress] = useState<SyncProgress | null>(null)
   const [fetchedAt, setFetchedAt] = useState<number | null>(null)
   const [fromCache, setFromCache] = useState(false)
+  const appsRef = useRef<MacApp[]>([])
+
+  useEffect(() => {
+    appsRef.current = apps
+  }, [apps])
 
   useEffect(() => {
     let cancelled = false
 
     async function load() {
       try {
-        const result = await loadApplications((p) => {
-          if (!cancelled) setProgress(p)
+        const result = await loadApplications({
+          onProgress: (p) => {
+            if (!cancelled) setProgress(p)
+          },
         })
 
         if (cancelled) return
 
         setApps(result.apps)
-        setFetchedAt(result.fetchedAt)
+        setFetchedAt(result.fetchedAt || null)
         setFromCache(result.fromCache)
         setLoading(false)
-        setProgress(null)
+
+        if (!result.backgroundSync) {
+          setProgress(null)
+          return
+        }
+
+        setSyncing(true)
+
+        const synced = await runBackgroundSync(result.apps, {
+          onProgress: (p) => {
+            if (!cancelled) setProgress(p)
+          },
+          onAppsUpdate: (nextApps) => {
+            if (!cancelled) setApps(nextApps)
+          },
+        })
+
+        if (cancelled) return
+
+        setApps(synced.apps)
+        setFetchedAt(synced.fetchedAt)
+        setFromCache(false)
       } catch (err) {
         if (!cancelled) {
           setError(err instanceof Error ? err.message : 'Unknown error')
           setLoading(false)
+        }
+      } finally {
+        if (!cancelled) {
+          setSyncing(false)
           setProgress(null)
         }
       }
@@ -74,22 +108,28 @@ export function useAppsData() {
     setError(null)
 
     try {
-      const result = await refreshApplications(setProgress)
+      const result = await refreshApplications(
+        {
+          onProgress: setProgress,
+          onAppsUpdate: setApps,
+        },
+        appsRef.current,
+      )
       setApps(result.apps)
       setFetchedAt(result.fetchedAt)
-      setLoading(false)
-      setProgress(null)
+      setFromCache(false)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error')
-      setProgress(null)
     } finally {
       setRefreshing(false)
+      setProgress(null)
     }
   }, [])
 
   return {
     apps,
     loading,
+    syncing,
     refreshing,
     error,
     progress,

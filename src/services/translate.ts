@@ -44,6 +44,7 @@ export interface TranslationTask {
 export async function translateWithReuse(
   tasks: TranslationTask[],
   onProgress?: (current: number, total: number, skipped: number) => void,
+  onItemComplete?: (index: number, translated: string) => void,
 ): Promise<string[]> {
   const results: string[] = new Array(tasks.length)
   const pending: number[] = []
@@ -74,6 +75,7 @@ export async function translateWithReuse(
       results[index] = en
     }
 
+    onItemComplete?.(index, results[index])
     onProgress?.(p + 1, pending.length, skipped)
 
     if (p < pending.length - 1) {

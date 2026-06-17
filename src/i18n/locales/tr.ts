@@ -20,6 +20,7 @@ export const tr: Translations = {
     savingData: 'Yerel depoya kaydediliyor...',
     syncProgress: '{current} / {total} çevrildi',
     syncProgressReused: '{current} / {total} çevrildi ({skipped} mevcut çeviri kullanıldı)',
+    syncingInBackground: 'Çeviriler arka planda güncelleniyor...',
     cacheInfo: 'Veri {age}',
     refreshData: 'Veriyi güncelle',
     refreshingData: 'Güncelleniyor...',
