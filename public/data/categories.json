@@ -1,0 +1,553 @@
+{
+  "categories": [
+    {
+      "title": {
+        "en": "Audio",
+        "tr": "Ses"
+      },
+      "id": "audio",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Backup",
+        "tr": "Yedekleme"
+      },
+      "id": "backup",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Browser",
+        "tr": "Tarayıcı"
+      },
+      "id": "browser",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Chat",
+        "tr": "Sohbet"
+      },
+      "id": "chat",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Cryptocurrency",
+        "tr": "Kripto Para"
+      },
+      "id": "cryptocurrency",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Database",
+        "tr": "Veritabanı"
+      },
+      "id": "database",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Development",
+        "tr": "Geliştirme"
+      },
+      "id": "development",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Downloader",
+        "tr": "İndirici"
+      },
+      "id": "downloader",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Editors",
+        "tr": "Editörler"
+      },
+      "id": "editors",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Extensions",
+        "tr": "Eklentiler"
+      },
+      "id": "extensions",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Finder",
+        "tr": "Finder"
+      },
+      "id": "finder",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Games",
+        "tr": "Oyunlar"
+      },
+      "id": "games",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Graphics",
+        "tr": "Grafik"
+      },
+      "id": "graphics",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "IDE",
+        "tr": "IDE"
+      },
+      "id": "ide",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Images",
+        "tr": "Görseller"
+      },
+      "id": "images",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Keyboard",
+        "tr": "Klavye"
+      },
+      "id": "keyboard",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Mail",
+        "tr": "E-posta"
+      },
+      "id": "mail",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Medical",
+        "tr": "Tıbbi"
+      },
+      "id": "medical",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Menubar",
+        "tr": "Menü Çubuğu"
+      },
+      "id": "menubar",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Music",
+        "tr": "Müzik"
+      },
+      "id": "music",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "News",
+        "tr": "Haberler"
+      },
+      "id": "news",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Notes",
+        "tr": "Notlar"
+      },
+      "id": "notes",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Other",
+        "tr": "Diğer"
+      },
+      "id": "other",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Player",
+        "tr": "Oynatıcı"
+      },
+      "id": "player",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Podcast",
+        "tr": "Podcast"
+      },
+      "id": "podcast",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Productivity",
+        "tr": "Verimlilik"
+      },
+      "id": "productivity",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Screensaver",
+        "tr": "Ekran Koruyucu"
+      },
+      "id": "screensaver",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Security",
+        "tr": "Güvenlik"
+      },
+      "id": "security",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Sharing Files",
+        "tr": "Dosya Paylaşımı"
+      },
+      "id": "sharing-files",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Social Networking",
+        "tr": "Sosyal Ağ"
+      },
+      "id": "social-networking",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Streaming",
+        "tr": "Yayın"
+      },
+      "id": "streaming",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "System",
+        "tr": "Sistem"
+      },
+      "id": "system",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Terminal",
+        "tr": "Terminal"
+      },
+      "id": "terminal",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Touch Bar",
+        "tr": "Touch Bar"
+      },
+      "id": "touch-bar",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Utilities",
+        "tr": "Araçlar"
+      },
+      "id": "utilities",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "VPN & Proxy",
+        "tr": "VPN ve Proxy"
+      },
+      "id": "vpn--proxy",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Video",
+        "tr": "Video"
+      },
+      "id": "video",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Wallpaper",
+        "tr": "Duvar Kağıdı"
+      },
+      "id": "wallpaper",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Window Management",
+        "tr": "Pencere Yönetimi"
+      },
+      "id": "window-management",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Git",
+        "tr": "Git"
+      },
+      "id": "git",
+      "parent": "development",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "iOS / macOS",
+        "tr": "iOS / macOS"
+      },
+      "id": "ios--macos",
+      "parent": "development",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "JSON Parsing",
+        "tr": "JSON Ayrıştırma"
+      },
+      "id": "json-parsing",
+      "parent": "development",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Web Development",
+        "tr": "Web Geliştirme"
+      },
+      "id": "web-development",
+      "parent": "development",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Other Development",
+        "tr": "Diğer Geliştirme"
+      },
+      "id": "other-development",
+      "parent": "development",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "CSV",
+        "tr": "CSV"
+      },
+      "id": "csv",
+      "parent": "editors",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "JSON",
+        "tr": "JSON"
+      },
+      "id": "json",
+      "parent": "editors",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Markdown",
+        "tr": "Markdown"
+      },
+      "id": "markdown",
+      "parent": "editors",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "TeX",
+        "tr": "TeX"
+      },
+      "id": "tex",
+      "parent": "editors",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    },
+    {
+      "title": {
+        "en": "Text",
+        "tr": "Metin"
+      },
+      "id": "text",
+      "parent": "editors",
+      "description": {
+        "en": "",
+        "tr": ""
+      }
+    }
+  ]
+}
