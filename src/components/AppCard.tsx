@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useI18n } from '../i18n'
 import type { MacApp } from '../types'
 import {
@@ -29,6 +30,8 @@ export function AppCard({
   const [galleryOpen, setGalleryOpen] = useState(false)
   const [galleryIndex, setGalleryIndex] = useState(0)
   const [iconError, setIconError] = useState(false)
+  const [previewSrc, setPreviewSrc] = useState<string | null>(null)
+  const mousePos = useRef({ x: 0, y: 0 })
 
   const screenshots = getScreenshotUrls(app.screenshots)
   const iconUrl = toRawGitHubUrl(app.icon_url)
@@ -41,7 +44,25 @@ export function AppCard({
     setGalleryOpen(false)
     setGalleryIndex(0)
     setIconError(false)
+    setPreviewSrc(null)
   }, [app.title, app.repo_url])
+
+  const handleThumbMouseMove = (e: React.MouseEvent) => {
+    mousePos.current = { x: e.clientX, y: e.clientY }
+    const el = document.getElementById('screenshot-preview')
+    if (el) {
+      const pw = 288
+      const ph = 192
+      const gap = 16
+      const vw = window.innerWidth
+      const vh = window.innerHeight
+      const { x, y } = mousePos.current
+      const left = x + gap + pw > vw ? x - pw - gap : x + gap
+      const top = Math.max(8, Math.min(y - ph / 2, vh - ph - 8))
+      el.style.left = `${left}px`
+      el.style.top = `${top}px`
+    }
+  }
 
   const openGallery = (index: number) => {
     setGalleryIndex(index)
@@ -107,6 +128,12 @@ export function AppCard({
                 type="button"
                 className="screenshot-thumb"
                 onClick={() => openGallery(i)}
+                onMouseEnter={(e) => {
+                  mousePos.current = { x: e.clientX, y: e.clientY }
+                  setPreviewSrc(src)
+                }}
+                onMouseMove={handleThumbMouseMove}
+                onMouseLeave={() => setPreviewSrc(null)}
                 aria-label={format(t.screenshot, { n: i + 1 })}
               >
                 <img src={src} alt="" loading="lazy" />
@@ -174,6 +201,27 @@ export function AppCard({
           initialIndex={galleryIndex}
           onClose={() => setGalleryOpen(false)}
         />
+      )}
+
+      {previewSrc && createPortal(
+        <div
+          id="screenshot-preview"
+          className="screenshot-preview"
+          style={(() => {
+            const pw = 288
+            const ph = 192
+            const gap = 16
+            const vw = window.innerWidth
+            const vh = window.innerHeight
+            const { x, y } = mousePos.current
+            const left = x + gap + pw > vw ? x - pw - gap : x + gap
+            const top = Math.max(8, Math.min(y - ph / 2, vh - ph - 8))
+            return { left, top }
+          })()}
+        >
+          <img src={previewSrc} alt="" />
+        </div>,
+        document.body,
       )}
     </>
   )
